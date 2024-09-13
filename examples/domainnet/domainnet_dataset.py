@@ -37,8 +37,7 @@ class DomainNetDataset(ImageDataset):
 
 def main():
     dataset = DomainNetDataset(root='/data/domainnet')
-
-    a=1
+    print(dataset.__getitem__(0))
 
 if __name__ == '__main__':
     main()
