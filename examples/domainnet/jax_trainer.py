@@ -24,7 +24,7 @@ class TrainerModule:
                  optimizer_hparams : dict,
                  exmp_imgs : Any,
                  seed=42, 
-                 checkpoint_path='./logs'):
+                 checkpoint_path='/home/yasin/repos/yasin-utils/logs'):
         """
         Module for summarizing all training functionalities for classification on CIFAR10.
 

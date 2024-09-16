@@ -12,7 +12,7 @@ from flax import linen as nn
 from flaxmodels import ResNet18
 
 def transform(img: PIL.Image):
-    img = img.resize((224, 224))
+    img = img.resize((128, 128))
     img = np.array(img) / 255.
 
     return img
@@ -48,12 +48,12 @@ def numpy_collate(batch):
     return np.stack(images), np.stack(labels)
 
 def main():
-    dataset = DomainNetDataset(root='/data/domainnet', transform=transform)
+    dataset = DomainNetDataset(root='/data/domainnet_v1.0', transform=transform)
     train_set, val_set, test_set = random_split(dataset, [0.8, 0.1, 0.1])
 
-    train_loader = DataLoader(train_set, 16, shuffle=True, collate_fn=numpy_collate)
-    val_loader = DataLoader(val_set, 16, shuffle=False, collate_fn=numpy_collate)
-    test_loader = DataLoader(test_set, 16, shuffle=False, collate_fn=numpy_collate)
+    train_loader = DataLoader(train_set, 32, shuffle=True, collate_fn=numpy_collate, num_workers=8, persistent_workers=True, pin_memory=True)
+    val_loader = DataLoader(val_set, 32, shuffle=False, collate_fn=numpy_collate, num_workers=8, persistent_workers=True, pin_memory=True)
+    test_loader = DataLoader(test_set, 32, shuffle=False, collate_fn=numpy_collate, num_workers=8, persistent_workers=True, pin_memory=True)
 
     resnet_trainer, resnet_results = train_classifier(
         train_loader=train_loader,
