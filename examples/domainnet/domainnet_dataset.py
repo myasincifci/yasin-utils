@@ -3,10 +3,10 @@ from yasin_utils.data import ImageDataset
 from domainnet_metadata import DOMAIN_NET_CLASSES, DOMAIN_NET_DOMAINS 
 
 class DomainNetDataset(ImageDataset):
-    def __init__(self, root: str, transform=None) -> None:
-        domains = ['clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch']
+    def __init__(self, root: str, transform=None, domains=None) -> None:
+        self.domains = ['clipart', 'infograph', 'painting', 'quickdraw', 'real', 'sketch'] if not domains else domains
         set_map = []
-        for domain in domains:
+        for domain in self.domains:
             try:
                 labels = os.listdir(os.path.join(root, domain))
             except:

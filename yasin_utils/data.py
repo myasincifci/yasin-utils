@@ -24,6 +24,22 @@ class ImageDataset(Dataset):
             image = self.transform(image)
 
         return dict(image=image, **sample)
+    
+class TransformWrapper(Dataset):
+    def __init__(self, dataset, transform=None):
+        self.dataset = dataset
+        self.transform = transform
+
+    def __getitem__(self, index):
+        if self.transform:
+            x = self.transform(self.dataset[index]['image'])
+        else:
+            x = self.dataset[index]['image']
+        y = self.dataset[index]['label']
+        return dict(image=x, label=y)
+    
+    def __len__(self):
+        return len(self.dataset)
 
 def main():
     pass
