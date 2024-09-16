@@ -1,6 +1,9 @@
 from typing import List, Dict
 from PIL import Image
 from torch.utils.data import Dataset
+import torch
+from torch.utils.data import DataLoader
+from tqdm import tqdm
 
 class ImageDataset(Dataset):
     def __init__(self, set_map: List[Dict], transform=None) -> None:
@@ -40,6 +43,22 @@ class TransformWrapper(Dataset):
     
     def __len__(self):
         return len(self.dataset)
+    
+def embed(model, dataset: Dataset, batch_size=256, num_workers=4, epochs=1):
+    dataloader = DataLoader(dataset, batch_size, num_workers=num_workers)
+    embeddings = []
+    labels = []
+    with torch.no_grad():
+        for epoch in range(epochs):
+            for batch in tqdm(dataloader):
+                image, label = batch['image'].cuda(), batch['label']
+                embedding = model(image)
+                embeddings.append(embedding)
+                labels.append(label)
+    embeddings = torch.cat(embeddings, dim=0).contiguous()
+    labels = torch.cat(labels, dim=0).contiguous()
+
+    return embeddings.detach().cpu().numpy(), labels.detach().cpu().numpy()
 
 def main():
     pass
