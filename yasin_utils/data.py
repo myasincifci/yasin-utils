@@ -38,8 +38,10 @@ class TransformWrapper(Dataset):
             x = self.transform(self.dataset[index]['image'])
         else:
             x = self.dataset[index]['image']
-        y = self.dataset[index]['label']
-        return dict(image=x, label=y)
+        
+        batch = self.dataset[index]
+        batch['image'] = x
+        return batch 
     
     def __len__(self):
         return len(self.dataset)

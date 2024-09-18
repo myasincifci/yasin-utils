@@ -12,8 +12,7 @@ class PerDomainAccuracy(Metric):
 
     def update(self, preds: Tensor, targets: Tensor, domains: Tensor):
         if preds.shape != targets.shape or preds.shape != domains.shape:
-            raise ValueError("preds, targets and domains must have the same \
-                             shape")
+            raise ValueError("preds, targets and domains must have the same shape")
         
         
         self.correct += domains[preds == targets].bincount(minlength=self.num_domains)
